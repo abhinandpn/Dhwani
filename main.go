@@ -24,12 +24,11 @@ func main() {
 	}
 	defer client.Close()
 
-	// Get Malayalam text from package
 	text := textprovider.GetText()
 	fmt.Println("Malayalam Text:", text)
 
-	// Get voice from package
-	gender := voice.SelectVoice()
+	// Select tone
+	voiceConfig := voice.SelectVoice()
 
 	req := &texttospeechpb.SynthesizeSpeechRequest{
 		Input: &texttospeechpb.SynthesisInput{
@@ -38,11 +37,15 @@ func main() {
 			},
 		},
 		Voice: &texttospeechpb.VoiceSelectionParams{
-			LanguageCode: "ml-IN", // Malayalam language code
-			SsmlGender:   gender,
+			LanguageCode: "ml-IN",
+			Name:         voiceConfig.VoiceName,
+			SsmlGender:   voiceConfig.Gender,
 		},
 		AudioConfig: &texttospeechpb.AudioConfig{
 			AudioEncoding: texttospeechpb.AudioEncoding_MP3,
+			SpeakingRate:  voiceConfig.Rate,
+			Pitch:         voiceConfig.Pitch,
+			VolumeGainDb:  voiceConfig.VolumeGainDb,
 		},
 	}
 
