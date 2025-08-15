@@ -4,6 +4,7 @@ go 1.23.6
 
 require (
 	cloud.google.com/go/texttospeech v1.13.0
+	github.com/go-chi/chi/v5 v5.2.2
 	google.golang.org/api v0.231.0
 	google.golang.org/genproto v0.0.0-20250811230008-5f3141c8851a
 )
