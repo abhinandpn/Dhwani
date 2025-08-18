@@ -7,10 +7,14 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Literata', serif; /* Use Literata for body text */
     background: var(--color-dhwani-bg-dark);
     color: #e2e8f0;
     transition: background 0.5s ease;
+}
+
+.font-crimson {
+    font-family: 'Crimson Pro', serif;
 }
 
 /* Keyframes for the floating soundwave animation */
@@ -39,3 +43,199 @@ body {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
+
+@layer base {
+    :root {
+        --color-dhwani-bg-dark: #0f172a;
+        --color-dhwani-card-dark: #1e293b;
+    }
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--color-dhwani-bg-dark);
+    color: #e2e8f0;
+    transition: background 0.5s ease;
+}
+
+/* Keyframes for the floating soundwave animation */
+@keyframes float {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(-10px, -20px); }
+    100% { transform: translate(0, 0); }
+}
+
+/* Soundwave animation styles */
+.soundwave {
+    animation: float 8s ease-in-out infinite;
+    filter: blur(50px); /* Tailwind filter style was inline, moved here for consistency */
+}
+
+.soundwave-2 {
+    animation-delay: -2s;
+    filter: blur(60px);
+}
+
+.soundwave-3 {
+    animation-delay: -4s;
+    filter: blur(40px);
+}
+
+/* Glassmorphism for cards */
+.glass-card {
+    background-color: rgba(30, 41, 59, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Caveat Brush Font Style */
+.caveat-brush-regular {
+  font-family: "Caveat Brush", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Caveat Brush */
+.caveat-brush {
+    font-family: "Caveat Brush", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  /* Gochi Hand */
+  .gochi-hand {
+    font-family: "Gochi Hand", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  /* Mynerve */
+  .mynerve {
+    font-family: "Mynerve", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+  /* Caveat Brush */
+.caveat-brush {
+    font-family: "Caveat Brush", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  /* Gochi Hand */
+  .gochi-hand {
+    font-family: "Gochi Hand", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  /* Mynerve */
+  .mynerve {
+    font-family: "Mynerve", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+  .boldonse-regular {
+    font-family: "Boldonse", system-ui;
+    font-weight: 400;
+    font-style: normal;
+  }
+  .indie-flower-regular {
+    font-family: "Indie Flower", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+  /* Example class for Shantell Sans */
+.shantell-sans {
+    font-family: "Shantell Sans", cursive;
+    font-optical-sizing: auto;
+    font-weight: 600; /* You can change this: 300 → 800 */
+    font-style: normal;
+    font-variation-settings:
+      "BNCE" 0,
+      "INFM" 0,
+      "SPAC" 0;
+  }
+  .about-developer {
+    font-family: "Indie Flower", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+  .custom-select-container {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .select-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: #2c3e50;
+    border-radius: 8px;
+    color: #ecf0f1;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, border-radius 0.2s ease;
+    border: 1px solid #34495e;
+  }
+  
+  .select-header:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5);
+  }
+  
+  .select-header.active {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  
+  .dropdown-icon {
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+  }
+  
+  .select-header.active .dropdown-icon {
+    transform: rotate(180deg);
+  }
+  
+  .select-options {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #34495e;
+    border-radius: 0 0 8px 8px;
+    border: 1px solid #2c3e50;
+    border-top: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    max-height: 0;
+    overflow-y: hidden;
+    transition: max-height 0.3s ease-out, border-color 0.3s ease;
+    z-index: 10;
+  }
+  
+  .select-options.open {
+    max-height: 200px; /* Adjust as needed */
+    overflow-y: auto;
+  }
+  
+  .select-options li {
+    padding: 12px 16px;
+    color: #bdc3c7;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  
+  .select-options li:hover {
+    background-color: #44607a;
+    color: #ecf0f1;
+  }
+  
+  .select-options li[data-group]:not(:first-of-type)[data-group] {
+    border-top: 1px solid #44607a;
+  }

@@ -9,6 +9,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Boldonse&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Gochi+Hand&family=Mynerve&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
 </head>
@@ -27,39 +39,77 @@
                 <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-50 drop-shadow-sm transition-colors duration-500">
                     <span class="inline-block transition-transform duration-300 hover:scale-105" style="font-family: 'Caveat Brush', cursive;">DHWANI</span>
                 </h1>
-                <p class="mt-4 text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto transition-colors duration-500">
-                    Convert Malayalam text into natural voice instantly.
-                </p>
-                <a href="#tool-section" class="mt-8 inline-block px-8 py-4 text-lg font-semibold rounded-full bg-blue-600 text-white shadow-xl hover:bg-blue-700 transition-all duration-300 hover:scale-105 animate-pulse-once">
+                <p class="mt-4 text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto transition-colors duration-500 caveat-brush">
+                    Dhwani converts Malayalam text into natural speech with multiple voices, 
+                    making it simple to create, practice, and enjoy the language.
+                </p>                
+                <!-- <a href="#tool-section" class="mt-8 inline-block px-8 py-4 text-lg font-semibold rounded-full bg-blue-600 text-white shadow-xl hover:bg-blue-700 transition-all duration-300 hover:scale-105 animate-pulse-once">
                     Try Now
+                </a> -->
+                <a href="#tool-section" 
+                    class="mt-8 inline-block px-8 py-4 text-lg font-semibold rounded-full bg-blue-600 text-white shadow-xl hover:bg-blue-700 transition-all duration-300 hover:scale-105 animate-pulse-once caveat-brush">
+                    Try It Now
                 </a>
+
             </section>
 
             <section id="tool-section" class="my-20">
                 <div class="glass-card p-6 md:p-10 rounded-3xl shadow-2xl border border-slate-700/50">
-                    <h2 class="text-3xl md:text-4xl font-bold text-center mb-6 text-gray-50 transition-colors duration-500">Malayalam Text-to-Speech</h2>
-                    <p class="text-center text-gray-300 mb-8 transition-colors duration-500">
-                        Type your Malayalam text below and select a voice.
-                    </p>
-                    
+                    <h2 class="text-3xl md:text-4xl font-bold text-center mb-6 text-gray-50 transition-colors duration-500 indie-flower-regular">
+                        Malayalam Text-to-Speech
+                    </h2>                    
+                    <p class="mt-4 text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto transition-colors duration-500 caveat-brush">
+                        Type your Malayalam text in the box below, 
+                        select a voice style you like, instantly generate natural, 
+                        lifelike speech that feels real and expressive.
+                    </p>                    
+                    <br>
+                    <br>
                     <div class="flex flex-col md:flex-row gap-6">
                         <div class="flex-1 space-y-4">
                             <div>
-                                <label for="text-input-ml" class="block text-sm font-medium text-gray-300 mb-2 mt-4">Malayalam Text Input</label>
+                                <label for="text-input-ml" 
+                                    class="mt-4 text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto transition-colors duration-500 caveat-brush text-center">
+                                    Malayalam Text Input
+                                </label>
+
                                 <textarea id="text-input-ml" class="w-full h-32 p-4 rounded-xl bg-slate-700/30 border border-slate-600/50 text-lg text-gray-50 placeholder-slate-500 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="നിങ്ങളുടെ മലയാളം ടെക്സ്റ്റ് ഇവിടെ ടൈപ്പ് ചെയ്യുക..."></textarea>
                             </div>
                         </div>
                         <div class="md:w-1/3 space-y-4 flex flex-col justify-end">
+                           <br>
                             <div class="p-4 rounded-xl bg-slate-700/30 border border-slate-600/50 shadow-inner">
-                                <label for="voice-select" class="block text-sm font-medium text-gray-300 mb-2">Select Voice</label>
-                                <select id="voice-select" class="w-full p-2 rounded-lg bg-slate-800/50 border border-slate-600/50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300">
-                                    <option value="voice1">Arun (Male - Normal)</option>
-                                    <option value="voice2">Sindhu (Female - Normal)</option>
-                                    <option value="voice3">Pranav (Male - Announcement)</option>
-                                    <option value="voice4">Kavya (Female - Announcement)</option>
-                                    <option value="voice5">Harish (Male - Storytelling)</option>
-                                    <option value="voice6">Manju (Female - Storytelling)</option>                                    
-                                </select>
+                                <label for="voice-select" class="mt-4 text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto transition-colors duration-500 caveat-brush">
+                                    Select Voice
+                                </label>
+                                <!-- <select id="voice-select" class="w-full p-2 rounded-lg bg-slate-800/50 border border-slate-600/50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300">
+                                    <optgroup label="Normal">
+                                        <option value="voice1">Arun (Male)</option>
+                                        <option value="voice2">Sindhu (Female)</option>
+                                    </optgroup>
+                                    <optgroup label="Announcement">
+                                        <option value="voice3">Pranav (Male)</option>
+                                        <option value="voice4">Kavya (Female)</option>
+                                    </optgroup>
+                                    <optgroup label="Storytelling">
+                                        <option value="voice5">Harish (Male)</option>
+                                        <option value="voice6">Manju (Female)</option>
+                                    </optgroup>
+                                </select> -->
+                                <div class="custom-select-container">
+                                    <div class="select-header" tabindex="0">
+                                      <span class="selected-voice">Arun (Male)</span>
+                                      <span class="dropdown-icon">▼</span>
+                                    </div>
+                                    <ul class="select-options">
+                                        <li data-voice-id="voice1">Arun (Male) - Normal</li>
+                                        <li data-voice-id="voice2">Sindhu (Female) - Normal</li>
+                                        <li data-voice-id="voice3">Pranav (Male) - Announcement</li>
+                                        <li data-voice-id="voice4">Kavya (Female) - Announcement</li>
+                                        <li data-voice-id="voice5">Harish (Male) - Storytelling</li>
+                                        <li data-voice-id="voice6">Manju (Female) - Storytelling</li>
+                                      </ul>
+                                  </div>
                             </div>
                             <button id="generate-button" class="w-full px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold text-lg shadow-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500/50">
                                 Generate Voice ✨
@@ -82,11 +132,16 @@
 
             <section id="about" class="my-20">
                 <div class="glass-card p-6 md:p-10 rounded-3xl shadow-2xl border border-slate-700/50">
-                    <h2 class="text-3xl md:text-4xl font-bold text-center mb-6 text-gray-50 transition-colors duration-500">About Dhwani</h2>
+                    <h2 class="text-3xl md:text-4xl font-bold text-center mb-6 text-gray-50 transition-colors duration-500 indie-flower-regular">
+                        About Dhwani
+                    </h2>                    
                     <div class="flex flex-col md:flex-row items-center gap-8">
                         <div class="flex-1">
-                            <p class="text-lg text-gray-300 leading-relaxed transition-colors duration-500">
-                                Dhwani is a Malayalam AI speech tool that converts your text into natural voices. Designed for creators, educators, and businesses to make communication easier and more engaging. Our state-of-the-art AI ensures high-quality, clear, and expressive audio output, tailored to your needs.
+                            <p class="mt-4 text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto transition-colors duration-500 caveat-brush">
+                                Dhwani is a Malayalam AI speech tool that converts your text into natural voices. 
+                                Designed for creators, educators, and businesses to make communication 
+                                easier and more engaging. Our state-of-the-art AI ensures high-quality, 
+                                clear, and expressive audio output, tailored to your needs.
                             </p>
                         </div>
                         <div class="flex-shrink-0 w-full md:w-1/2">
@@ -105,14 +160,17 @@
 
             <section id="developer-profile" class="my-20">
                 <div class="glass-card p-6 md:p-10 rounded-3xl shadow-2xl border border-slate-700/50">
-                    <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-50 transition-colors duration-500">About the Developer</h2>
+                    <h2 class="about-developer text-gray-200 mb-6 text-lg font-semibold">
+                        About the Developer</h2>
                     <div class="flex flex-col md:flex-row items-center justify-center gap-8">
                         <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-blue-500 dark:border-amber-300 shadow-md">
                             <img src="https://placehold.co/128x128/1e40af/e0f2fe?text=APN" alt="Abhinand P N Avatar" class="w-full h-full object-cover">
                         </div>
                         <div class="text-center md:text-left">
-                            <h3 class="text-2xl md:text-3xl font-bold text-gray-50">Abhinand P N</h3>
-                            <p class="text-lg text-blue-600 dark:text-amber-300">Golang Developer at Talrop - Steyp</p>
+                            <h3 class="mt-4 text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto transition-colors duration-500 caveat-brush">
+                                Abhinand P N</h3>
+                            <p class="mt-4 text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto transition-colors duration-500 caveat-brush">
+                                Golang Developer at Talrop - Steyp</p>
                             <div class="mt-4 flex justify-center md:justify-start gap-4">
                                 <a href="https://github.com/abhinandpn" target="_blank" class="text-gray-400 hover:text-white transition-colors duration-300">
                                     <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

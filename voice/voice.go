@@ -20,13 +20,14 @@ type VoiceConfig struct {
 
 func SelectVoice() VoiceConfig {
 	options := []string{
-		"1. Male (Normal)",
-		"2. Female (Normal)",
-		"3. Male (Announcement)",
-		"4. Female (Announcement)",
-		"5. Male (Storytelling)",
-		"6. Female (Storytelling)",
+		"1. Arun (Male - Normal)",        	// Male (Normal)
+		"2. Sindhu (Female - Normal)",    	// Female (Normal)
+		"3. Pranav (Male - Announcement)",	// Male (Announcement)
+		"4. Kavya (Female - Announcement)",	// Female (Announcement)
+		"5. Harish (Male - Storytelling)",	// Male (Storytelling)
+		"6. Manju (Female - Storytelling)",	// Female (Storytelling)
 	}
+	
 
 	fmt.Println("Select a voice tone:")
 	for _, opt := range options {

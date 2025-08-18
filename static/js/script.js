@@ -182,3 +182,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const selectHeader = document.querySelector('.select-header');
+    const selectOptions = document.querySelector('.select-options');
+    const selectedVoiceSpan = document.querySelector('.selected-voice');
+  
+    selectHeader.addEventListener('click', () => {
+      selectOptions.classList.toggle('open');
+      selectHeader.classList.toggle('active');
+    });
+  
+    selectOptions.addEventListener('click', (e) => {
+      if (e.target.tagName === 'LI') {
+        const selectedText = e.target.textContent;
+        const selectedVoiceId = e.target.dataset.voiceId;
+  
+        selectedVoiceSpan.textContent = selectedText;
+        
+        // Here you can use the selectedVoiceId to perform actions
+        console.log(`Voice selected: ${selectedText} (ID: ${selectedVoiceId})`);
+        
+        selectOptions.classList.remove('open');
+        selectHeader.classList.remove('active');
+      }
+    });
+  
+    // Close the dropdown if the user clicks outside of it
+    document.addEventListener('click', (e) => {
+      if (!selectHeader.contains(e.target) && !selectOptions.contains(e.target)) {
+        selectOptions.classList.remove('open');
+        selectHeader.classList.remove('active');
+      }
+    });
+  });
