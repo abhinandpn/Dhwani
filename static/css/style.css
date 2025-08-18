@@ -239,3 +239,12 @@ body {
   .select-options li[data-group]:not(:first-of-type)[data-group] {
     border-top: 1px solid #44607a;
   }
+
+/* Import the font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap');
+
+.caveat-brush {
+  font-family: 'Caveat Brush', cursive;
+  font-weight: 400;
+  font-style: normal;
+}
