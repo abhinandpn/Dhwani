@@ -1,0 +1,41 @@
+/* Define a custom color and font for Tailwind */
+@layer base {
+    :root {
+        --color-dhwani-bg-dark: #0f172a;
+        --color-dhwani-card-dark: #1e293b;
+    }
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--color-dhwani-bg-dark);
+    color: #e2e8f0;
+    transition: background 0.5s ease;
+}
+
+/* Keyframes for the floating soundwave animation */
+@keyframes float {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(-10px, -20px); }
+    100% { transform: translate(0, 0); }
+}
+
+/* Soundwave animation styles */
+.soundwave {
+    animation: float 8s ease-in-out infinite;
+}
+
+.soundwave-2 {
+    animation-delay: -2s;
+}
+
+.soundwave-3 {
+    animation-delay: -4s;
+}
+
+/* Glassmorphism for cards */
+.glass-card {
+    background-color: rgba(30, 41, 59, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
