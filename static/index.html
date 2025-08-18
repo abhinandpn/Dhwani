@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
 </head>
 <body class="bg-slate-900 text-gray-100">
 
@@ -22,7 +25,7 @@
             
             <section id="hero" class="text-center py-20 lg:py-32">
                 <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-50 drop-shadow-sm transition-colors duration-500">
-                    <span class="inline-block transition-transform duration-300 hover:scale-105">DHWANI</span>
+                    <span class="inline-block transition-transform duration-300 hover:scale-105" style="font-family: 'Caveat Brush', cursive;">DHWANI</span>
                 </h1>
                 <p class="mt-4 text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto transition-colors duration-500">
                     Convert Malayalam text into natural voice instantly.
@@ -50,12 +53,12 @@
                             <div class="p-4 rounded-xl bg-slate-700/30 border border-slate-600/50 shadow-inner">
                                 <label for="voice-select" class="block text-sm font-medium text-gray-300 mb-2">Select Voice</label>
                                 <select id="voice-select" class="w-full p-2 rounded-lg bg-slate-800/50 border border-slate-600/50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300">
-                                    <option value="voice1">Voice 1 (Zephyr)</option>
-                                    <option value="voice2">Voice 2 (Puck)</option>
-                                    <option value="voice3">Voice 3 (Kore)</option>
-                                    <option value="voice4">Voice 4 (Leda)</option>
-                                    <option value="voice5">Voice 5 (Orus)</option>
-                                    <option value="voice6">Voice 6 (Sadachbia)</option>
+                                    <option value="voice1">Arun (Male - Normal)</option>
+                                    <option value="voice2">Sindhu (Female - Normal)</option>
+                                    <option value="voice3">Pranav (Male - Announcement)</option>
+                                    <option value="voice4">Kavya (Female - Announcement)</option>
+                                    <option value="voice5">Harish (Male - Storytelling)</option>
+                                    <option value="voice6">Manju (Female - Storytelling)</option>                                    
                                 </select>
                             </div>
                             <button id="generate-button" class="w-full px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold text-lg shadow-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500/50">
@@ -87,11 +90,13 @@
                             </p>
                         </div>
                         <div class="flex-shrink-0 w-full md:w-1/2">
-                            <svg class="w-full h-auto text-blue-500 dark:text-amber-300" viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="50" y="50" width="300" height="100" rx="20" ry="20" stroke="currentColor" stroke-width="3" stroke-dasharray="10 5" class="animate-pulse opacity-70"></rect>
-                                <path d="M100 120 C120 100, 180 100, 200 120 S280 140, 300 120" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse"></path>
-                                <text x="200" y="100" font-family="'Inter', sans-serif" font-size="28" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="currentColor">AI</text>
-                                <text x="200" y="145" font-family="'Inter', sans-serif" font-size="28" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="currentColor">ധ്വനി</text>
+                            <svg class="w-full h-auto text-blue-500 dark:text-amber-300" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="10" y="10" width="180" height="130" rx="15" ry="15" stroke="currentColor" stroke-width="2" class="opacity-70"></rect>
+                                <circle cx="100" cy="75" r="30" stroke="currentColor" stroke-width="2" class="opacity-90"></circle>
+                                <path d="M70 75 A30 30 0 0 1 130 75" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse"></path>
+                                <path d="M100 45 L115 60 M100 45 L85 60 M100 105 L115 90 M100 105 L85 90" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="opacity-80"></path>
+                                <text x="100" y="75" font-family="'Inter', sans-serif" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="currentColor">AI</text>
+                                <text x="100" y="110" font-family="'Inter', sans-serif" font-size="20" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="currentColor">ധ്വനി</text>
                             </svg>
                         </div>
                     </div>
