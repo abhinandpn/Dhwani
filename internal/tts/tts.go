@@ -3,10 +3,11 @@ package tts
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"time"
 
 	texttospeech "cloud.google.com/go/texttospeech/apiv1"
+	"github.com/abhinandpn/Dhwani/voice"
 	"google.golang.org/api/option"
 	texttospeechpb "google.golang.org/genproto/googleapis/cloud/texttospeech/v1"
 )
@@ -24,21 +25,25 @@ func NewTTSService(credsPath string) (*TTSService, error) {
 	return &TTSService{Client: client}, nil
 }
 
-func (t *TTSService) Synthesize(text string, voiceType string) (string, error) {
+// Synthesize takes text + VoiceConfig and generates audio
+func (t *TTSService) Synthesize(text string, cfg voice.VoiceConfig) (string, error) {
 	ctx := context.Background()
-
-	// Voice selection based on request
-	voiceParams := &texttospeechpb.VoiceSelectionParams{
-		LanguageCode: "ml-IN",
-		SsmlGender:   getGender(voiceType),
-	}
 
 	req := &texttospeechpb.SynthesizeSpeechRequest{
 		Input: &texttospeechpb.SynthesisInput{
 			InputSource: &texttospeechpb.SynthesisInput_Text{Text: text},
 		},
-		Voice:       voiceParams,
-		AudioConfig: &texttospeechpb.AudioConfig{AudioEncoding: texttospeechpb.AudioEncoding_MP3},
+		Voice: &texttospeechpb.VoiceSelectionParams{
+			LanguageCode: "ml-IN",
+			Name:         cfg.VoiceName,
+			SsmlGender:   cfg.Gender,
+		},
+		AudioConfig: &texttospeechpb.AudioConfig{
+			AudioEncoding: texttospeechpb.AudioEncoding_MP3,
+			SpeakingRate:  cfg.Rate,
+			Pitch:         cfg.Pitch,
+			VolumeGainDb:  cfg.VolumeGainDb,
+		},
 	}
 
 	resp, err := t.Client.SynthesizeSpeech(ctx, req)
@@ -46,20 +51,14 @@ func (t *TTSService) Synthesize(text string, voiceType string) (string, error) {
 		return "", err
 	}
 
-	// Save file
+	// Ensure output directory exists
+	_ = os.MkdirAll("output", os.ModePerm)
+
+	// Save file with timestamp
 	fileName := fmt.Sprintf("output/output_%d.mp3", time.Now().Unix())
-	err = ioutil.WriteFile(fileName, resp.AudioContent, 0644)
+	err = os.WriteFile(fileName, resp.AudioContent, 0644)
 	if err != nil {
 		return "", err
 	}
 	return fileName, nil
-}
-
-func getGender(voiceType string) texttospeechpb.SsmlVoiceGender {
-	switch voiceType {
-	case "male", "male-announcement", "male-story":
-		return texttospeechpb.SsmlVoiceGender_MALE
-	default:
-		return texttospeechpb.SsmlVoiceGender_FEMALE
-	}
 }

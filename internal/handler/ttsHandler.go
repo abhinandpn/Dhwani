@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/abhinandpn/Dhwani/internal/tts"
+	"github.com/abhinandpn/Dhwani/voice"
 )
 
 type TTSHandler struct {
@@ -18,14 +19,16 @@ func NewTTSHandler(service *tts.TTSService) *TTSHandler {
 func (h *TTSHandler) GenerateTTS(w http.ResponseWriter, r *http.Request) {
 	var body struct {
 		Text  string `json:"text"`
-		Voice string `json:"voice"`
+		Voice int    `json:"voice"` // expecting 1-6
 	}
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	filePath, err := h.Service.Synthesize(body.Text, body.Voice)
+	cfg := voice.GetVoiceConfig(body.Voice)
+
+	filePath, err := h.Service.Synthesize(body.Text, cfg)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
