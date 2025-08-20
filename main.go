@@ -21,12 +21,21 @@ func main() {
 	}
 
 	// -------------------------------
+	// Google Credentials Path
+	// -------------------------------
+	// First, try to read from ENV (works inside Docker)
+	credsPath := os.Getenv("GOOGLE_APPLICATION_CREDENTIALS")
+	if credsPath == "" {
+		// fallback to your local dev path
+		credsPath = "/home/delta/Downloads/Dhwani-GTTS/dhwani-469106-63cddd3273b0.json"
+	}
+
+	// -------------------------------
 	// Initialize TTS service
 	// -------------------------------
-	credsPath := "/home/delta/Downloads/Dhwani-GTTS/dhwani-469106-63cddd3273b0.json"
 	service, err := tts.NewTTSService(credsPath)
 	if err != nil {
-		log.Fatalf("Failed to create TTS service: %v", err)
+		log.Fatalf("Failed to create TTS service (credsPath=%s): %v", credsPath, err)
 	}
 
 	// -------------------------------

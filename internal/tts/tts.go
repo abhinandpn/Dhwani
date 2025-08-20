@@ -16,6 +16,7 @@ type TTSService struct {
 	Client *texttospeech.Client
 }
 
+// Existing function (manual path)
 func NewTTSService(credsPath string) (*TTSService, error) {
 	ctx := context.Background()
 	client, err := texttospeech.NewClient(ctx, option.WithCredentialsFile(credsPath))
@@ -23,6 +24,15 @@ func NewTTSService(credsPath string) (*TTSService, error) {
 		return nil, err
 	}
 	return &TTSService{Client: client}, nil
+}
+
+// 🔹 New function (auto from env)
+func NewTTSServiceFromEnv() (*TTSService, error) {
+	credPath := os.Getenv("GOOGLE_APPLICATION_CREDENTIALS")
+	if credPath == "" {
+		return nil, fmt.Errorf("GOOGLE_APPLICATION_CREDENTIALS not set")
+	}
+	return NewTTSService(credPath)
 }
 
 // Synthesize takes text + VoiceConfig and generates audio

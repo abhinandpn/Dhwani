@@ -2,14 +2,12 @@
  * ===============================
  * Dhwani Frontend JS – Malayalam TTS
  * ===============================
- * This file handles:
- * 1. User input for Malayalam text
+ * Handles:
+ * 1. User input (Malayalam text)
  * 2. Voice selection
- * 3. Communication with the backend / Google TTS API
- * 4. Generating and playing audio
- * 5. Downloading the generated audio
- * 
- * Ready for frontend deployment with backend API on Cloud Run.
+ * 3. Backend API call (Cloud Run)
+ * 4. Generate + play audio dynamically (uses backend sampleRate)
+ * 5. Download audio
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,16 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------
     // Element References
     // -------------------------------
-    const audioOutput = document.getElementById('audio-output'); // Container for audio player & download
-    const audioPlayer = document.getElementById('audio-player'); // <audio> element
-    const downloadButton = document.getElementById('download-button'); // Download link
-    const generateBtn = document.getElementById('generate-button'); // Generate Voice button
-    const textInputMl = document.getElementById('text-input-ml'); // Malayalam text input
-    const voiceSelect = document.getElementById('voice-select'); // Voice select dropdown
-    const audioMessage = document.getElementById('audio-message'); // Status messages
+    const audioOutput = document.getElementById('audio-output');
+    const audioPlayer = document.getElementById('audio-player');
+    const downloadButton = document.getElementById('download-button');
+    const generateBtn = document.getElementById('generate-button');
+    const textInputMl = document.getElementById('text-input-ml');
+    const voiceSelect = document.getElementById('voice-select');
+    const audioMessage = document.getElementById('audio-message');
 
     // -------------------------------
-    // Voice Map – User selection to TTS voice
+    // Voice Map – user selection → TTS voice
     // -------------------------------
     const voiceMap = {
         'voice1': 'Zephyr',
@@ -38,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // -------------------------------
-    // Helper: Convert Base64 to ArrayBuffer
+    // Helpers
     // -------------------------------
     function base64ToArrayBuffer(base64) {
         const binaryString = window.atob(base64);
@@ -50,9 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return bytes.buffer;
     }
 
-    // -------------------------------
-    // Helper: Convert PCM to WAV Blob
-    // -------------------------------
     function pcmToWav(pcmData, sampleRate) {
         const buffer = new ArrayBuffer(44 + pcmData.byteLength);
         const view = new DataView(buffer);
@@ -64,18 +59,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        writeString(view, 0, 'RIFF');                       // RIFF header
-        view.setUint32(4, 36 + pcmData.byteLength, littleEndian); // File size
-        writeString(view, 8, 'WAVE');                       // WAVE type
-        writeString(view, 12, 'fmt ');                      // Format chunk
-        view.setUint32(16, 16, littleEndian);              // Format chunk length
-        view.setUint16(20, 1, littleEndian);               // Audio format = PCM
-        view.setUint16(22, 1, littleEndian);               // Channels = 1
-        view.setUint32(24, sampleRate, littleEndian);      // Sample rate
-        view.setUint32(28, sampleRate * 2, littleEndian);  // Byte rate
-        view.setUint16(32, 2, littleEndian);               // Block align
-        view.setUint16(34, 16, littleEndian);              // Bits per sample
-        writeString(view, 36, 'data');                     // Data chunk
+        writeString(view, 0, 'RIFF');
+        view.setUint32(4, 36 + pcmData.byteLength, littleEndian);
+        writeString(view, 8, 'WAVE');
+        writeString(view, 12, 'fmt ');
+        view.setUint32(16, 16, littleEndian);
+        view.setUint16(20, 1, littleEndian);  // PCM
+        view.setUint16(22, 1, littleEndian);  // Mono
+        view.setUint32(24, sampleRate, littleEndian);
+        view.setUint32(28, sampleRate * 2, littleEndian);
+        view.setUint16(32, 2, littleEndian);
+        view.setUint16(34, 16, littleEndian);
+        writeString(view, 36, 'data');
         view.setUint32(40, pcmData.byteLength, littleEndian);
 
         const pcm16 = new Int16Array(pcmData);
@@ -87,10 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -------------------------------
-    // Generate Voice Button Click
+    // Generate Voice
     // -------------------------------
     generateBtn.addEventListener('click', async () => {
-
         const textToSpeak = textInputMl.value.trim();
         if (!textToSpeak) {
             audioMessage.textContent = "Please enter some Malayalam text to generate audio.";
@@ -103,23 +97,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedVoice = voiceSelect.value;
         const voiceName = voiceMap[selectedVoice];
 
-        // UI state: loading
+        // Loading state
         generateBtn.textContent = 'Generating...';
         generateBtn.disabled = true;
         audioOutput.classList.add('hidden');
         audioMessage.textContent = "";
 
         try {
-            // -------------------------------
-            // Backend API Call
-            // -------------------------------
-            // Replace this URL with your Cloud Run API if needed:
-            const apiUrl = `/api/tts`;  // For Cloud Run deployment serving both frontend + backend
+            // Call backend (Cloud Run serves both frontend + backend)
+            const apiUrl = `/api/tts`;
 
-            const payload = {
-                text: textToSpeak,
-                voice: voiceName
-            };
+            const payload = { text: textToSpeak, voice: voiceName };
 
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -127,30 +115,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify(payload)
             });
 
-            if (!response.ok) {
-                throw new Error(`API call failed with status: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`API failed with status: ${response.status}`);
 
             const result = await response.json();
-            const audioBase64 = result.audioData; // Backend should return Base64 audio
+            const audioBase64 = result.audioData;
+            const sampleRate = result.sampleRate || 24000; // fallback if backend doesn't return it
 
             if (!audioBase64) throw new Error("No audio data received from API");
 
-            // Convert Base64 → WAV → Play & Download
+            // Convert to playable WAV
             const pcmData = base64ToArrayBuffer(audioBase64);
-            const wavBlob = pcmToWav(pcmData, 24000); // Use sample rate from backend if dynamic
+            const wavBlob = pcmToWav(pcmData, sampleRate);
             const audioUrl = URL.createObjectURL(wavBlob);
 
+            // Attach to player + download
             audioPlayer.src = audioUrl;
             downloadButton.href = audioUrl;
+            downloadButton.download = "dhwani_audio.wav";
 
+            // Show success
             audioMessage.textContent = "Your Malayalam voice is ready!";
             audioOutput.classList.remove('hidden');
             audioOutput.style.transform = 'scale(1)';
             audioOutput.style.opacity = '1';
 
         } catch (error) {
-            console.error("Failed to generate voice:", error);
+            console.error("TTS generation failed:", error);
             audioMessage.textContent = `Error: ${error.message}. Please try again.`;
             audioOutput.classList.remove('hidden');
             audioOutput.style.transform = 'scale(1)';
@@ -162,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // -------------------------------
-    // Custom Voice Dropdown Logic
+    // Custom Voice Dropdown
     // -------------------------------
     const selectHeader = document.querySelector('.select-header');
     const selectOptions = document.querySelector('.select-options');
@@ -179,14 +169,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const selectedVoiceId = e.target.dataset.voiceId;
 
             selectedVoiceSpan.textContent = selectedText;
-            voiceSelect.value = selectedVoiceId; // Update hidden select input for API
+            voiceSelect.value = selectedVoiceId;
 
             selectOptions.classList.remove('open');
             selectHeader.classList.remove('active');
         }
     });
 
-    // Close dropdown if clicked outside
     document.addEventListener('click', (e) => {
         if (!selectHeader.contains(e.target) && !selectOptions.contains(e.target)) {
             selectOptions.classList.remove('open');
