@@ -9,3 +9,6 @@
 /server/dhwani-key.json
 /otherserver/dhwani-key.json
 server/dhwani-key.json
+# Ignore credentials
+*.json
+.env
