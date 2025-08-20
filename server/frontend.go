@@ -6,7 +6,7 @@ import (
 )
 
 // Frontend serves your static files from the "docs" folder
-func Frontend() {
+func Frontend() error {
 	fs := http.FileServer(http.Dir("./docs"))
 	http.Handle("/", fs)
 
@@ -15,4 +15,5 @@ func Frontend() {
 	if err != nil {
 		log.Fatal("Server failed:", err)
 	}
+	return nil
 }

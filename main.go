@@ -11,8 +11,10 @@ import (
 )
 
 func main() {
-
-	server.Frontend()
+	// Initialize the frontend server
+	if err := server.Frontend(); err != nil {
+		log.Fatalf("Failed to start frontend server: %v", err)
+	}
 	// Path to your Google TTS JSON key
 	credsPath := "/home/delta/Downloads/Dhwani-GTTS/dhwani-469106-63cddd3273b0.json"
 
