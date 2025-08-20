@@ -5,7 +5,8 @@ import (
 	"net/http"
 
 	"github.com/abhinandpn/Dhwani/internal/tts"
-	"github.com/abhinandpn/Dhwani/voice"
+
+	"github.com/abhinandpn/Dhwani/internal/voice"
 )
 
 type TTSHandler struct {

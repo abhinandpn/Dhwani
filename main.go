@@ -43,7 +43,7 @@ func main() {
 	r.Handle("/*", server.FrontendHandler())
 
 	// API endpoints
-	r.Post("/api/generate", ttsHandler.GenerateTTS)
+	r.Post("/api/tts", ttsHandler.GenerateTTS)
 	r.Get("/api/play", ttsHandler.PlayAudio)
 
 	// -------------------------------

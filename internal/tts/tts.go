@@ -7,9 +7,9 @@ import (
 	"time"
 
 	texttospeech "cloud.google.com/go/texttospeech/apiv1"
-	"github.com/abhinandpn/Dhwani/voice"
+	"cloud.google.com/go/texttospeech/apiv1/texttospeechpb"
+	"github.com/abhinandpn/Dhwani/internal/voice"
 	"google.golang.org/api/option"
-	texttospeechpb "google.golang.org/genproto/googleapis/cloud/texttospeech/v1"
 )
 
 type TTSService struct {
