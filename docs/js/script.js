@@ -1,13 +1,33 @@
+/**
+ * ===============================
+ * Dhwani Frontend JS – Malayalam TTS
+ * ===============================
+ * This file handles:
+ * 1. User input for Malayalam text
+ * 2. Voice selection
+ * 3. Communication with the backend / Google TTS API
+ * 4. Generating and playing audio
+ * 5. Downloading the generated audio
+ * 
+ * Ready for frontend deployment with backend API on Cloud Run.
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
-    const audioOutput = document.getElementById('audio-output');
-    const audioPlayer = document.getElementById('audio-player');
-    const downloadButton = document.getElementById('download-button');
-    const generateBtn = document.getElementById('generate-button');
-    const textInputMl = document.getElementById('text-input-ml');
-    const voiceSelect = document.getElementById('voice-select');
-    const audioMessage = document.getElementById('audio-message');
-    
-    // Map the selected voice option to a Gemini TTS voice name
+
+    // -------------------------------
+    // Element References
+    // -------------------------------
+    const audioOutput = document.getElementById('audio-output'); // Container for audio player & download
+    const audioPlayer = document.getElementById('audio-player'); // <audio> element
+    const downloadButton = document.getElementById('download-button'); // Download link
+    const generateBtn = document.getElementById('generate-button'); // Generate Voice button
+    const textInputMl = document.getElementById('text-input-ml'); // Malayalam text input
+    const voiceSelect = document.getElementById('voice-select'); // Voice select dropdown
+    const audioMessage = document.getElementById('audio-message'); // Status messages
+
+    // -------------------------------
+    // Voice Map – User selection to TTS voice
+    // -------------------------------
     const voiceMap = {
         'voice1': 'Zephyr',
         'voice2': 'Puck',
@@ -17,7 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'voice6': 'Sadachbia',
     };
 
-    // Helper function to convert base64 to ArrayBuffer
+    // -------------------------------
+    // Helper: Convert Base64 to ArrayBuffer
+    // -------------------------------
     function base64ToArrayBuffer(base64) {
         const binaryString = window.atob(base64);
         const len = binaryString.length;
@@ -28,57 +50,47 @@ document.addEventListener('DOMContentLoaded', () => {
         return bytes.buffer;
     }
 
-    // Helper function to convert raw PCM audio to a WAV file Blob
+    // -------------------------------
+    // Helper: Convert PCM to WAV Blob
+    // -------------------------------
     function pcmToWav(pcmData, sampleRate) {
         const buffer = new ArrayBuffer(44 + pcmData.byteLength);
         const view = new DataView(buffer);
         const littleEndian = true;
-
-        /* RIFF identifier */
-        writeString(view, 0, 'RIFF');
-        /* RIFF chunk length */
-        view.setUint32(4, 36 + pcmData.byteLength, littleEndian);
-        /* RIFF type */
-        writeString(view, 8, 'WAVE');
-        /* format chunk identifier */
-        writeString(view, 12, 'fmt ');
-        /* format chunk length */
-        view.setUint32(16, 16, littleEndian);
-        /* sample format (raw) */
-        view.setUint16(20, 1, littleEndian);
-        /* channel count */
-        view.setUint16(22, 1, littleEndian);
-        /* sample rate */
-        view.setUint32(24, sampleRate, littleEndian);
-        /* byte rate (sample rate * block align) */
-        view.setUint32(28, sampleRate * 2, littleEndian);
-        /* block align (channel count * bytes per sample) */
-        view.setUint16(32, 2, littleEndian);
-        /* bits per sample */
-        view.setUint16(34, 16, littleEndian);
-        /* data chunk identifier */
-        writeString(view, 36, 'data');
-        /* data chunk length */
-        view.setUint32(40, pcmData.byteLength, littleEndian);
-
-        // Write the PCM data
-        const pcm16 = new Int16Array(pcmData);
-        for (let i = 0; i < pcm16.length; i++) {
-            view.setInt16(44 + i * 2, pcm16[i], littleEndian);
-        }
-
-        return new Blob([view], { type: 'audio/wav' });
 
         function writeString(view, offset, string) {
             for (let i = 0; i < string.length; i++) {
                 view.setUint8(offset + i, string.charCodeAt(i));
             }
         }
+
+        writeString(view, 0, 'RIFF');                       // RIFF header
+        view.setUint32(4, 36 + pcmData.byteLength, littleEndian); // File size
+        writeString(view, 8, 'WAVE');                       // WAVE type
+        writeString(view, 12, 'fmt ');                      // Format chunk
+        view.setUint32(16, 16, littleEndian);              // Format chunk length
+        view.setUint16(20, 1, littleEndian);               // Audio format = PCM
+        view.setUint16(22, 1, littleEndian);               // Channels = 1
+        view.setUint32(24, sampleRate, littleEndian);      // Sample rate
+        view.setUint32(28, sampleRate * 2, littleEndian);  // Byte rate
+        view.setUint16(32, 2, littleEndian);               // Block align
+        view.setUint16(34, 16, littleEndian);              // Bits per sample
+        writeString(view, 36, 'data');                     // Data chunk
+        view.setUint32(40, pcmData.byteLength, littleEndian);
+
+        const pcm16 = new Int16Array(pcmData);
+        for (let i = 0; i < pcm16.length; i++) {
+            view.setInt16(44 + i * 2, pcm16[i], littleEndian);
+        }
+
+        return new Blob([view], { type: 'audio/wav' });
     }
 
-
-    // Handle the "Generate Voice" button click
+    // -------------------------------
+    // Generate Voice Button Click
+    // -------------------------------
     generateBtn.addEventListener('click', async () => {
+
         const textToSpeak = textInputMl.value.trim();
         if (!textToSpeak) {
             audioMessage.textContent = "Please enter some Malayalam text to generate audio.";
@@ -90,85 +102,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const selectedVoice = voiceSelect.value;
         const voiceName = voiceMap[selectedVoice];
-        
-        // UI state: show loading
+
+        // UI state: loading
         generateBtn.textContent = 'Generating...';
         generateBtn.disabled = true;
         audioOutput.classList.add('hidden');
-        audioOutput.style.transform = 'scale(0.95)';
-        audioOutput.style.opacity = '0';
         audioMessage.textContent = "";
 
         try {
+            // -------------------------------
+            // Backend API Call
+            // -------------------------------
+            // Replace this URL with your Cloud Run API if needed:
+            const apiUrl = `/api/tts`;  // For Cloud Run deployment serving both frontend + backend
+
             const payload = {
-                contents: [{
-                    parts: [{ text: textToSpeak }]
-                }],
-                generationConfig: {
-                    responseModalities: ["AUDIO"],
-                    speechConfig: {
-                        voiceConfig: {
-                            prebuiltVoiceConfig: { voiceName: voiceName }
-                        }
-                    }
-                },
-                model: "gemini-2.5-flash-preview-tts"
+                text: textToSpeak,
+                voice: voiceName
             };
 
-            const apiKey = "";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
 
-            // Exponential backoff for retries
-            let retries = 0;
-            const maxRetries = 5;
-            const baseDelay = 1000;
-
-            let response;
-            while (retries < maxRetries) {
-                try {
-                    response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    if (response.status === 429) { // Too many requests
-                        const delay = baseDelay * Math.pow(2, retries);
-                        await new Promise(res => setTimeout(res, delay));
-                        retries++;
-                        continue;
-                    }
-                    break; // Success or non-retryable error
-                } catch (e) {
-                    throw e;
-                }
-            }
-
-            if (!response || !response.ok) {
-                throw new Error(`API call failed with status: ${response ? response.status : 'No response'}`);
+            if (!response.ok) {
+                throw new Error(`API call failed with status: ${response.status}`);
             }
 
             const result = await response.json();
-            const part = result?.candidates?.[0]?.content?.parts?.[0];
-            const audioData = part?.inlineData?.data;
-            const mimeType = part?.inlineData?.mimeType;
+            const audioBase64 = result.audioData; // Backend should return Base64 audio
 
-            if (audioData && mimeType && mimeType.startsWith("audio/L16")) {
-                const sampleRate = parseInt(mimeType.match(/rate=(\d+)/)[1], 10);
-                const pcmData = base64ToArrayBuffer(audioData);
-                const wavBlob = pcmToWav(pcmData, sampleRate);
-                const audioUrl = URL.createObjectURL(wavBlob);
-                
-                // Update UI with generated audio
-                audioPlayer.src = audioUrl;
-                downloadButton.href = audioUrl;
-                
-                audioMessage.textContent = "Your Malayalam voice is ready!";
-                audioOutput.classList.remove('hidden');
-                audioOutput.style.transform = 'scale(1)';
-                audioOutput.style.opacity = '1';
-            } else {
-                 throw new Error("Invalid audio data received from API.");
-            }
+            if (!audioBase64) throw new Error("No audio data received from API");
+
+            // Convert Base64 → WAV → Play & Download
+            const pcmData = base64ToArrayBuffer(audioBase64);
+            const wavBlob = pcmToWav(pcmData, 24000); // Use sample rate from backend if dynamic
+            const audioUrl = URL.createObjectURL(wavBlob);
+
+            audioPlayer.src = audioUrl;
+            downloadButton.href = audioUrl;
+
+            audioMessage.textContent = "Your Malayalam voice is ready!";
+            audioOutput.classList.remove('hidden');
+            audioOutput.style.transform = 'scale(1)';
+            audioOutput.style.opacity = '1';
 
         } catch (error) {
             console.error("Failed to generate voice:", error);
@@ -181,38 +160,38 @@ document.addEventListener('DOMContentLoaded', () => {
             generateBtn.disabled = false;
         }
     });
-});
 
-document.addEventListener('DOMContentLoaded', () => {
+    // -------------------------------
+    // Custom Voice Dropdown Logic
+    // -------------------------------
     const selectHeader = document.querySelector('.select-header');
     const selectOptions = document.querySelector('.select-options');
     const selectedVoiceSpan = document.querySelector('.selected-voice');
-  
+
     selectHeader.addEventListener('click', () => {
-      selectOptions.classList.toggle('open');
-      selectHeader.classList.toggle('active');
+        selectOptions.classList.toggle('open');
+        selectHeader.classList.toggle('active');
     });
-  
+
     selectOptions.addEventListener('click', (e) => {
-      if (e.target.tagName === 'LI') {
-        const selectedText = e.target.textContent;
-        const selectedVoiceId = e.target.dataset.voiceId;
-  
-        selectedVoiceSpan.textContent = selectedText;
-        
-        // Here you can use the selectedVoiceId to perform actions
-        console.log(`Voice selected: ${selectedText} (ID: ${selectedVoiceId})`);
-        
-        selectOptions.classList.remove('open');
-        selectHeader.classList.remove('active');
-      }
+        if (e.target.tagName === 'LI') {
+            const selectedText = e.target.textContent;
+            const selectedVoiceId = e.target.dataset.voiceId;
+
+            selectedVoiceSpan.textContent = selectedText;
+            voiceSelect.value = selectedVoiceId; // Update hidden select input for API
+
+            selectOptions.classList.remove('open');
+            selectHeader.classList.remove('active');
+        }
     });
-  
-    // Close the dropdown if the user clicks outside of it
+
+    // Close dropdown if clicked outside
     document.addEventListener('click', (e) => {
-      if (!selectHeader.contains(e.target) && !selectOptions.contains(e.target)) {
-        selectOptions.classList.remove('open');
-        selectHeader.classList.remove('active');
-      }
+        if (!selectHeader.contains(e.target) && !selectOptions.contains(e.target)) {
+            selectOptions.classList.remove('open');
+            selectHeader.classList.remove('active');
+        }
     });
-  });
+
+});
