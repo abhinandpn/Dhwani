@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/abhinandpn/Dhwani/internal/handler"
 	"github.com/abhinandpn/Dhwani/internal/tts"
@@ -11,27 +12,45 @@ import (
 )
 
 func main() {
-	// Initialize the frontend server
-	if err := server.Frontend(); err != nil {
-		log.Fatalf("Failed to start frontend server: %v", err)
+	// -------------------------------
+	// Cloud Run dynamic PORT
+	// -------------------------------
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
 	}
-	// Path to your Google TTS JSON key
-	credsPath := "/home/delta/Downloads/Dhwani-GTTS/dhwani-469106-63cddd3273b0.json"
 
-	// Create TTS service
+	// -------------------------------
+	// Initialize TTS service
+	// -------------------------------
+	credsPath := "/home/delta/Downloads/Dhwani-GTTS/dhwani-469106-63cddd3273b0.json"
 	service, err := tts.NewTTSService(credsPath)
 	if err != nil {
 		log.Fatalf("Failed to create TTS service: %v", err)
 	}
 
-	// Create handler
+	// -------------------------------
+	// Initialize TTS handler
+	// -------------------------------
 	ttsHandler := handler.NewTTSHandler(service)
 
-	// Router setup
+	// -------------------------------
+	// Router setup using Chi
+	// -------------------------------
 	r := chi.NewRouter()
-	r.Post("/generate", ttsHandler.GenerateTTS)
-	r.Get("/play", ttsHandler.PlayAudio)
 
-	log.Println("Server running at :8080")
-	http.ListenAndServe(":8080", r)
+	// Serve frontend files at "/"
+	r.Handle("/*", server.FrontendHandler())
+
+	// API endpoints
+	r.Post("/api/generate", ttsHandler.GenerateTTS)
+	r.Get("/api/play", ttsHandler.PlayAudio)
+
+	// -------------------------------
+	// Start server
+	// -------------------------------
+	log.Printf("Server running on port %s", port)
+	if err := http.ListenAndServe(":"+port, r); err != nil {
+		log.Fatalf("Server failed: %v", err)
+	}
 }
