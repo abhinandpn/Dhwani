@@ -1,4 +1,4 @@
-# Use the latest stable Go version that supports >=1.23.6
+# Use the latest stable Go version
 FROM golang:1.23-alpine AS builder
 
 # Set working directory
@@ -20,7 +20,7 @@ FROM alpine:latest
 # Set working directory
 WORKDIR /app
 
-# Copy binary and static files
+# Copy binary and static files (no secrets!)
 COPY --from=builder /app/dhwani .
 COPY --from=builder /app/docs ./docs
 
@@ -29,6 +29,3 @@ EXPOSE 8080
 
 # Run the binary
 CMD ["./dhwani"]
-# Copy env and credentials
-COPY server/dhwani-key.json /app/server/dhwani-key.json
-COPY .env /app/.env
