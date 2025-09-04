@@ -60,7 +60,7 @@ func getPort() string {
 func getCredentialsPath() string {
 	credsPath := os.Getenv("GOOGLE_APPLICATION_CREDENTIALS")
 	if credsPath == "" {
-		credsPath = "/home/delta/Downloads/Dhwani-GTTS/dhwani-469106-63cddd3273b0.json"
+		credsPath = "/Users/abhinanpn/Desktop/Credentials/dhwani-469106-63cddd3273b0.json"
 	}
 	return credsPath
 }
